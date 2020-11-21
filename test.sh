@@ -1,5 +1,9 @@
 #/bin/bash
 
+# ################ #
+# Global functions #
+# ################ #
+
 function runcurl () {
    curl -k -X POST -d postdata.txt -b cookie-jar.txt -c cookie-jar.txt -o response.txt "$1"
    return $?
@@ -10,24 +14,28 @@ function die () {
    exit 127;
 }
 
-rm -v cookie-jar.txt postdata.txt response.txt
+rm -fv cookie-jar.txt postdata.txt response.txt
 
 function check_rsperror () {
-   if [ `grep -c '"errorcode": 0' "$1"` -ne 0 ]; then
+   if [ `grep -c '"errorcode": 0' "$1"` -eq 0 ]; then
       echo Error: `cat "$1"`
-      die "response error"
+      die "response error in $2"
    fi
 }
 
+# ########################### #
+# The endpoint test functions #
+# ########################### #
+#
 function mysqlshim_login () {
    echo -ne '
 {
-   "email":    "admin",
-   "password": "12345"
+   "email":    '"$1"',
+   "password": '"$2"',
 }
 '  > postdata.txt
    runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_login.php
-   check_rsperror response.txt
+   check_rsperror response.txt mysqlshim_login
 }
 
 function mysqlshim_logout () {
@@ -37,52 +45,62 @@ function mysqlshim_logout () {
 }
 '  > postdata.txt
    runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_logout.php
-   check_rsperror response.txt
+   check_rsperror response.txt mysqlshim_logout
 }
 
 function mysqlshim_change_password () {
    echo -ne '
 {
-   "target-email":         "admin",
-   "old-password":         "54321",
-   "new-password":         "12345",
-   "confirm-password":     "12345",
+   "target-email":         '"$1"',
+   "old-password":         '"$2"',
+   "new-password":         '"$3"',
+   "confirm-password":     '"$4"',
 }
 '  > postdata.txt
    runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_change_password.php
-   check_rsperror response.txt
+   check_rsperror response.txt mysqlshim_change_password
 }
 
 function mysqlshim_add_user () {
    echo -ne '
 {
-   "new-email":            "test-user",
-   "new-password":         "12345",
-   "confirm-password":     "12345",
+   "new-email":            '"$1"',
+   "new-password":         '"$2"',
+   "confirm-password":     '"$3"',
 }
 '  > postdata.txt
    runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_add_user.php
-   check_rsperror response.txt
+   check_rsperror response.txt mysqlshim_add_user
 }
 
-function mysqlshim_lockout_user () {
+function mysqlshim_disable_user () {
    echo -ne '
 {
-   "email":            "test-user",
+   "email":            '"$1"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_lockout_user.php
-   check_rsperror response.txt
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_disable_user.php
+   check_rsperror response.txt mysqlshim_disable_user
+}
+
+function mysqlshim_enable_user () {
+   echo -ne '
+{
+   "email":            '"$1"',
+}
+'  > postdata.txt
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_enable_user.php
+   check_rsperror response.txt mysqlshim_enable_user
 }
 
 function mysqlshim_del_user () {
    echo -ne '
 {
-   "email":            "test-user",
+   "email":            '"$1"',
 }
 '  > postdata.txt
    runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_del_user.php
-   check_rsperror response.txt
+   check_rsperror response.txt mysqlshim_del_user
 }
 
 function mysqlshim_callsp () {
@@ -102,6 +120,14 @@ function mysqlshim_callsp () {
    "random":     5
 }'
    runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_callsp.php
-   check_rsperror response.txt
+   check_rsperror response.txt mysqlshim_callsp
 }
+
+
+# ################## #
+# The testing itself #
+# ################## #
+
+mysqlshim_login "admin" "54321"
+
 
