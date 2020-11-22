@@ -13,9 +13,19 @@ FAILED="$RED$CROSS$NC"
 PASSED="$GREEN$CHECK$NC"
 
 
+function check_rsperror () {
+   if [ `grep -c '"errorcode": 0' "$1"` -eq 0 ]; then
+      echo -ne $RED Error:$NC "\n"
+      cat $1 | sed "s/^/$CROSS   /g"
+      die "[$FAILED] $2 ${RED}failed$NC"
+   fi
+   echo -ne "[$PASSED] $2 ${GREEN}passed\n"
+}
+
 function runcurl () {
    curl -k -X POST -d postdata.txt -b cookie-jar.txt -c cookie-jar.txt -o response.txt "$1"
-   return $?
+   export RC=$?
+   check_rsperror response.txt "$1"
 }
 
 function die () {
@@ -24,15 +34,6 @@ function die () {
 }
 
 rm -fv cookie-jar.txt postdata.txt response.txt
-
-function check_rsperror () {
-   if [ `grep -c '"errorcode": 0' "$1"` -eq 0 ]; then
-      echo -ne $RED Error:$NC "\n"
-      cat $1 | sed "s/^/$CROSS   /g"
-      die "[$FAILED] $2 test ${RED}failed$NC"
-   fi
-   echo "[$PASSED] $2 test ${GREEN}passed"
-}
 
 # ########################### #
 # The endpoint test functions #
@@ -45,8 +46,7 @@ function mysqlshim_login () {
    "password": '"$2"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_login.php
-   check_rsperror response.txt mysqlshim_login
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_login.php
 }
 
 function mysqlshim_logout () {
@@ -55,8 +55,7 @@ function mysqlshim_logout () {
 
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_logout.php
-   check_rsperror response.txt mysqlshim_logout
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_logout.php
 }
 
 function mysqlshim_change_password () {
@@ -68,8 +67,7 @@ function mysqlshim_change_password () {
    "confirm-password":     '"$4"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_change_password.php
-   check_rsperror response.txt mysqlshim_change_password
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_change_password.php
 }
 
 function mysqlshim_add_user () {
@@ -80,8 +78,7 @@ function mysqlshim_add_user () {
    "confirm-password":     '"$3"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_add_user.php
-   check_rsperror response.txt mysqlshim_add_user
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_add_user.php
 }
 
 function mysqlshim_disable_user () {
@@ -90,8 +87,7 @@ function mysqlshim_disable_user () {
    "email":            '"$1"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_disable_user.php
-   check_rsperror response.txt mysqlshim_disable_user
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_disable_user.php
 }
 
 function mysqlshim_enable_user () {
@@ -100,8 +96,7 @@ function mysqlshim_enable_user () {
    "email":            '"$1"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_enable_user.php
-   check_rsperror response.txt mysqlshim_enable_user
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_enable_user.php
 }
 
 function mysqlshim_del_user () {
@@ -110,8 +105,7 @@ function mysqlshim_del_user () {
    "email":            '"$1"',
 }
 '  > postdata.txt
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_del_user.php
-   check_rsperror response.txt mysqlshim_del_user
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_del_user.php
 }
 
 function mysqlshim_callsp () {
@@ -130,8 +124,7 @@ function mysqlshim_callsp () {
    echo -ne '
    "random":     5
 }'
-   runcurl http://localhost/~lelanthran/mysqlshim/mysqlhim/mysqlshim_callsp.php
-   check_rsperror response.txt mysqlshim_callsp
+   runcurl http://localhost/~lelanthran/mysqlshim/mysqlshim/mysqlshim_callsp.php
 }
 
 
