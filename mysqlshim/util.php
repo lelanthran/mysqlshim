@@ -6,7 +6,7 @@ function util_response ($errcode, $errmsg, $matrix) {
                  "  \"errorcode\": $errcode,\n" .
                  "  \"errormessage\": \"$errmsg\",\n";
 
-   $ret = $ret . '   [ ';
+   $ret = $ret . '  "payload": [ ';
    $nrows = count ($matrix);
    $delim = '';
    for ($i=0; $i<$nrows; $i++) {

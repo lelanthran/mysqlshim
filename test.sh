@@ -38,7 +38,8 @@ rm -fv cookie-jar.txt postdata.txt response.txt
 # ########################### #
 # The endpoint test functions #
 # ########################### #
-#
+
+
 function mysqlshim_login () {
    echo -ne '
 {

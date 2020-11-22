@@ -2,11 +2,11 @@
 $authfile = 'auth-file.csv';
 
 function auth_load () {
-
+   // TODO:
 }
 
 function auth_save () {
-
+   // TODO:
 }
 
 function auth_login () {
