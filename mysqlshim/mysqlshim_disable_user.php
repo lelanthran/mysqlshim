@@ -14,6 +14,6 @@ function mysqlshim_disable_user ($email) {
 
 $json = file_get_contents ('php://input');
 $data = json_decode ($json);
-mysqlshim_disable_user ($data["email"]);
+mysqlshim_disable_user ($data->{"email"});
 
 ?>

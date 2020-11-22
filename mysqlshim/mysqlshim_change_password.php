@@ -14,9 +14,9 @@ function mysqlshim_change_password ($email, $old_pass, $new_pass, $confirm_pass)
 $json = file_get_contents ('php://input');
 $data = json_decode ($json);
 
-mysqlshim_change_password ($data["target-email"],
-                           $data["old-password"],
-                           $data["new-password"],
-                           $data["confirm-password"]);
+mysqlshim_change_password ($data->{'target-email'},
+                           $data->{'old-password'},
+                           $data->{'new-password'},
+                           $data->{'confirm-password'});
 
 ?>

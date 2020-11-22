@@ -14,6 +14,6 @@ function mysqlshim_add_user ($new_email, $new_pass, $confirm_pass) {
 
 $json = file_get_contents ('php://input');
 $data = json_decode ($json);
-mysqlshim_add_user ($data["new-email"], $data["new-password"], $data["confirm-password"]);
+mysqlshim_add_user ($data->{"new-email"}, $data->{"new-password"}, $data->{"confirm-password"});
 
 ?>

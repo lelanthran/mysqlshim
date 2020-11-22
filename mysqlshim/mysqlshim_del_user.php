@@ -14,6 +14,6 @@ function mysqlshim_del_user ($email) {
 
 $json = file_get_contents ('php://input');
 $data = json_decode ($json);
-mysqlshim_del_user ($data["email"]);
+mysqlshim_del_user ($data->{"email"});
 
 ?>

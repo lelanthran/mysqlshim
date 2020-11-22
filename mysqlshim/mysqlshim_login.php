@@ -19,6 +19,7 @@ function mysqlshim_login ($email, $password) {
 
 $json = file_get_contents ('php://input');
 $data = json_decode ($json);
-mysqlshim_login ($data["email"], $data["password"]);
+
+mysqlshim_login ($data->{'email'}, $data->{'password'});
 
 ?>
