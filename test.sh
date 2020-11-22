@@ -19,7 +19,7 @@ function check_rsperror () {
       cat $1 | sed "s/^/$CROSS   /g"
       die "[$FAILED] $2 ${RED}failed$NC"
    fi
-   echo -ne "[$PASSED] $2 ${GREEN}passed\n"
+   echo -ne "[$PASSED] $2 ${GREEN}passed$NC\n"
 }
 
 function runcurl () {
@@ -134,5 +134,12 @@ function mysqlshim_callsp () {
 # ################## #
 
 mysqlshim_login "admin" "54321"
+mysqlshim_change_password "admin" "54321" "12345"
+mysqlshim_logout
+mysqlshim_login "admin" "12345"
+mysqlshim_add_user "newuser" "password" "password"
+mysqlshim_disable_user "newuser"
+mysqlshim_enable_user "newuser"
+mysqlshim_del_user "newuser"
 
 

@@ -22,5 +22,3 @@ $data = json_decode ($json);
 mysqlshim_login ($data["email"], $data["password"]);
 
 ?>
-
-
