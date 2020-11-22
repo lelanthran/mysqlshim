@@ -4,13 +4,22 @@
 # Global functions #
 # ################ #
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+CROSS="✗"
+CHECK="✓"
+FAILED="$RED$CROSS$NC"
+PASSED="$GREEN$CHECK$NC"
+
+
 function runcurl () {
    curl -k -X POST -d postdata.txt -b cookie-jar.txt -c cookie-jar.txt -o response.txt "$1"
    return $?
 }
 
 function die () {
-   echo $@
+   echo -ne "$@" "\n"
    exit 127;
 }
 
@@ -18,9 +27,11 @@ rm -fv cookie-jar.txt postdata.txt response.txt
 
 function check_rsperror () {
    if [ `grep -c '"errorcode": 0' "$1"` -eq 0 ]; then
-      echo Error: `cat "$1"`
-      die "response error in $2"
+      echo -ne $RED Error:$NC "\n"
+      cat $1 | sed "s/^/$CROSS   /g"
+      die "[$FAILED] $2 test ${RED}failed$NC"
    fi
+   echo "[$PASSED] $2 test ${GREEN}passed"
 }
 
 # ########################### #
