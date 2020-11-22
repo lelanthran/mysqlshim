@@ -31,4 +31,24 @@ function auth_logout () {
    return $ret;
 }
 
+function auth_add_user ($new_email, $new_pass, $confirm_pass) {
+   $ret = [ ERRCODE_SUCCESS, ERRMESG_SUCCESS ];
+   return $ret;
+}
+
+function auth_disable_user ($email) {
+   $ret = [ ERRCODE_SUCCESS, ERRMESG_SUCCESS ];
+   return $ret;
+}
+
+function auth_enable_user ($email) {
+   $ret = [ ERRCODE_SUCCESS, ERRMESG_SUCCESS ];
+   return $ret;
+}
+
+function auth_del_user ($email) {
+   $ret = [ ERRCODE_SUCCESS, ERRMESG_SUCCESS ];
+   return $ret;
+}
+
 ?>
