@@ -141,5 +141,4 @@ mysqlshim_add_user "newuser" "password" "password"
 mysqlshim_disable_user "newuser"
 mysqlshim_enable_user "newuser"
 mysqlshim_del_user "newuser"
-mysqlshim_callsp "test_sp" 0 5 p1 p2 p3 p4 p5
-
+mysqlshim_callsp "set_keypair" 0 5 name1 value1
